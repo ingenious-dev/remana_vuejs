@@ -1,0 +1,7 @@
+# + # + https://redis.io/learn/operate/docker/nodejs-nginx-redis
+# version: '3.9'
+services:
+  nginx:
+    build: .
+    ports:
+    - '80:80'

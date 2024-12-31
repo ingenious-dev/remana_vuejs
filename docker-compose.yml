@@ -1,0 +1,16 @@
+# + https://medium.com/@prasunamudawari/deploying-a-vue-js-application-with-docker-and-nginx-387fef1a27f2
+# + https://docs.docker.com/reference/compose-file/build/#illustrative-example
+# version: '3.9'
+services:
+  nginx_xano:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.xano
+    ports:
+    - '80:80'
+  nginx_expressjs:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.expressjs
+    ports:
+    - '81:80'

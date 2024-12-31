@@ -36,7 +36,7 @@
           </div>
 
           <div class="mt-8">
-            <div>
+            <div v-if="BACKEND_TECHNOLOGY != 'XANO'">
               <div>
                 <p class="text-sm font-medium text-gray-700">Sign up with</p>
 
@@ -225,6 +225,7 @@ export default {
       name: '',
       password: '',
       password2: '',
+      BACKEND_TECHNOLOGY: import.meta.env.VITE_BACKEND_TECHNOLOGY
     }
   },
 

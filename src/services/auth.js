@@ -39,10 +39,14 @@ async function register(data) {
     }
 }
 
-async function continueWithGoogleDeprecated({code}) {
-    // + https://developers.google.com/identity/sign-in/web/server-side-flow#step_6_send_the_authorization_code_to_the_server
+// <<<<<<<<<<>>>>>>>>>>
+// Specifically for XANO
+async function continueWithGoogleInit({redirect_uri}) {
+    var query = redirect_uri == null ? '' : `redirect_uri=${redirect_uri}`;
+    query = `?${query}`;
+
     try {
-        const response = await axios.get(`${GOOGLE_OAUTH_CANNONICAL}/oauth/google/continue?code=${code}`);
+        const response = await axios.get(`${GOOGLE_OAUTH_CANNONICAL}/oauth/google/init${query}`);
         console.log(response);
         return response.data;
     } catch (error) {
@@ -50,6 +54,23 @@ async function continueWithGoogleDeprecated({code}) {
         throw new Error(axios_error_message(error));
     }
 }
+
+async function continueWithGoogleDeprecated({code, redirect_uri}) {
+    var query = code == null ? '' : `code=${code}`;
+    query += redirect_uri == null ? '' : `&redirect_uri=${redirect_uri}`;
+    query = `?${query}`;
+
+    // + https://developers.google.com/identity/sign-in/web/server-side-flow#step_6_send_the_authorization_code_to_the_server
+    try {
+        const response = await axios.get(`${GOOGLE_OAUTH_CANNONICAL}/oauth/google/continue${query}`);
+        console.log(response);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        throw new Error(axios_error_message(error));
+    }
+}
+// <<<<<<<<<<>>>>>>>>>>
 
 async function continueWithGoogle(data) {
     try {
@@ -82,6 +103,7 @@ export {
     renewLogin,
     register,
 
+    continueWithGoogleInit,
     continueWithGoogleDeprecated,
     continueWithGoogle,
 

@@ -3,6 +3,7 @@ import {
     renewLogin,
     register,
 
+    continueWithGoogleDeprecated,
     continueWithGoogle,
 
     updateUser,
@@ -163,6 +164,36 @@ const module = {
         },
         logout ({ commit, state }, payload) {            
             commit('clearToken')
+        },
+
+        continueWithGoogleDeprecated ({ commit, state }, payload) {   
+            commit('setAuthIsLoading')         
+            commit('clearAuthError')
+            // Make a request for a user with a given ID
+            continueWithGoogleDeprecated(payload)
+                .then(function (data) {
+                    // handle success
+                    console.log(data);
+                    commit('setToken', {
+                        token: data.token
+                    })
+                    // ! TO BE DONE - get user details now?
+                    // commit('setUser', {
+                    //     user: data.user
+                    // })
+                    store.dispatch('showAlert', {title: 'Login successful', message: 'You have loggged into the account', status: 'success'})
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                    store.dispatch('showAlert', {title: 'Error!', message: error.message, status: 'error'})
+                    commit('setAuthError', {error: error.message})
+                    throw error;
+                })
+                .finally(function () {
+                    // always executed
+                    commit('clearAuthIsLoading')
+                });
         },
 
         continueWithGoogle ({ commit, state }, payload) {   

@@ -93,6 +93,7 @@ export default {
   data() {
     return {
       message: '',
+      BACKEND_TECHNOLOGY: import.meta.env.VITE_BACKEND_TECHNOLOGY
     }
   },
 
@@ -155,27 +156,30 @@ export default {
     async authenticateWithServer(resp) {
       // GET Request with id_token query parameter but using veux to handle business logic
 
-      const data = {
-        code: resp.code,
-      }
+      var data = {}
+      switch (this.BACKEND_TECHNOLOGY) {
+        case 'Express JS':
+          data = {
+            code: resp.code,
+          }
+          
+          this.$store.dispatch('continueWithGoogle', data);
+          break;
+        
+        case 'XANO':
+          data = {
+            code: resp.code,
+            redirect_uri: `${location.protocol}//${location.host}/activities`,
+          }
+          
+          this.$store.dispatch('continueWithGoogleDeprecated', data);
+          break;
       
-      this.$store.dispatch('continueWithGoogle', data);
+        default:
+          break;
+      }
     },
 
-    signIn() {
-      // Get `GoogleAuth` instance
-      var auth2 = gapi.auth2.getAuthInstance();
-
-      // Sign-In
-      auth2.signIn()
-        .then(this.authenticateWithServer)
-        // .then(changeProfile, function() {
-        //   this.$store.dispatch('showAlert', {title: 'Error!', 'Authentication failed.': error, status: 'error'})
-        // })
-        .catch(function(error) {
-          this.$store.dispatch('showAlert', {title: 'Error!', message: error, status: 'error'})
-        });
-    }
   },
 
   // Lifecycle hooks are called at different stages

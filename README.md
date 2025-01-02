@@ -1,13 +1,22 @@
-# Vue 3 + Vite
+# REMANA VUEJS FRONTEND
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+![N|Solid](./REMANA-logo.png)
 
-## Recommended IDE Setup
+Building a `RE`lationship `MANA`gement frontend using [Vue.js](https://vuejs.org/).
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+This is the frontend for both the `XANO`/`Express JS` API Service. The code for the `Express JS` backend can be found on the following link:   
+https://github.com/ingenious-dev/remana_expressjs
 
+## Development setup
+To setup a dev environment for coding, clone the repository and then run `npm install` to get the needed dependencies.
 
-## Tailwind Plugins
-```sh
-npm install -D @tailwindcss/aspect-ratio
+## Running with Docker
+### Docker Compose
+For testing, a docker container is included in the repository. To build and run the container make sure you have docker installed for your OS. Then build and start the docker container using this command:
 ```
+docker-compose up -d
+```
+
+The `XANO` powered frontend can be access on `http://localhost:80` and the `Express JS` powered frontend can be access on `http://localhost:81`.
+
+Lastly remember to start the Express JS API Service before running the docker command, as the `Express JS` powered frontend requires it.

@@ -7,10 +7,10 @@ services:
       context: .
       dockerfile: ./Dockerfile.xano
     ports:
-    - '80:80'
+    - '801:80'
   nginx_expressjs:
     build:
       context: .
       dockerfile: ./Dockerfile.expressjs
     ports:
-    - '81:80'
+    - '802:80'

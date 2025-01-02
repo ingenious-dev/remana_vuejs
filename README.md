@@ -17,6 +17,6 @@ For testing, a docker container is included in the repository. To build and run 
 docker-compose up -d
 ```
 
-The `XANO` powered frontend can be access on `http://localhost:80` and the `Express JS` powered frontend can be access on `http://localhost:81`.
+The `XANO` powered frontend can be access on `http://localhost:801` and the `Express JS` powered frontend can be access on `http://localhost:802`.
 
 Lastly remember to start the Express JS API Service before running the docker command, as the `Express JS` powered frontend requires it.

@@ -13,117 +13,81 @@
   ```
 -->
 <template>
-  <div class="h-screen bg-slate-900 relative p-8">
-    <!-- Mobile menu and search (lg-) -->
-    <div class="flex flex-1 items-center absolute top-5 left-5 z-10">
-      <button type="button" class="-ml-2 rounded-md bg-white p-2 text-gray-400" @click="openAction = true">
-        <span class="sr-only">Open menu</span>
-        <Bars3Icon class="h-6 w-6" aria-hidden="true" />
-      </button>
-    </div>
+  <div class="bg-white">
+    <div class="mx-auto max-w-2xl py-4 px-4 sm:py-4 sm:px-6 lg:max-w-7xl lg:px-8">
+      
+      <div class="bg-white">
+        <div class="py-6 px-4 sm:px-6 lg:p-4">
+          <div class="flex flex-col md:flex-row gap-4">
 
-    <div class="h-full relative">
-      <div class="absolute top-0 right-0">
-        <div class="text-center flex items-center gap-4 p-2" v-if="activityIsLoading">
-          <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
-            <ArrowPathIcon class="h-6 w-6 text-green-600 animate-spin" aria-hidden="true" />
-          </div>
-          <!-- <div class="text-center">
-            <div as="h3" class="text-lg font-medium leading-6 text-gray-900">Getting Activities</div>
-            <div class="mt-2">
-              <p class="text-sm text-gray-500">Kindly wait while we get activities. <br> This should take a second</p>
+            <ul role="list" class="flex-auto flex justify-between md:justify-around">
+              <li class="flex text-center">
+                <!-- <img class="h-10 w-10 rounded-full" :src="person.image" alt="" /> -->
+                <div class="ml-3">
+                  <p class="text-sm text-gray-500">
+                    <span class="lg:hidden">{{ $moment(startDate).format("MMM D YYYY") }}</span>
+                    <span class="hidden lg:inline">{{ $moment(startDate).format("dddd, MMMM Do YYYY") }}</span>
+                  </p>
+                  <p class="text-xs font-medium text-gray-900 mt-1">Start Date</p>
+                </div>
+              </li>
+              <li class="flex">
+                <div class="ml-3 text-center">
+                  <p class="text-sm text-gray-500">
+                    <span class="lg:hidden">{{ $moment(endDate).format("MMM D YYYY") }}</span>
+                    <span class="hidden lg:inline">{{ $moment(endDate).format("dddd, MMMM Do YYYY") }}</span>
+                  </p>
+                  <p class="text-xs font-medium text-gray-900 mt-1">End Date</p>
+                </div>
+              </li>
+              <li class="flex text-center">
+                <div class="ml-3">
+                  <p class="text-sm text-gray-500">
+                    {{ activities.length }}
+                  </p>
+                  <p class="text-xs font-medium text-gray-900 mt-1">Activity Count</p>
+                </div>
+              </li>
+            </ul>
+            <div class="">
+              <button
+                type="button"
+                class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 w-full"
+                @click="openSideBar()"
+                >Add an activity</button>
             </div>
-          </div> -->
+
+          </div>
         </div>
       </div>
-      <div class="h-full w-full" ref="orbit_navigation" id="orbit-navigation">
-        <OrbitNavigation
-          :drawOrbitsData="drawOrbitsData"
-          :changeDays="changeDays"
-          :onActivityClick="(activity_id) => openSideBar(activity_id)" />
+
+      <div class="bg-slate-50 shadow-sm sm:rounded-lg mt-4 relative">
+        <div class="absolute top-0 left-0">
+          <div class="text-center flex items-center gap-4 p-2" v-if="activityIsLoading">
+            <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+              <ArrowPathIcon class="h-6 w-6 text-green-600 animate-spin" aria-hidden="true" />
+            </div>
+            <!-- <div class="text-center">
+              <div as="h3" class="text-lg font-medium leading-6 text-gray-900">Getting Activities</div>
+              <div class="mt-2">
+                <p class="text-sm text-gray-500">Kindly wait while we get activities. <br> This should take a second</p>
+              </div>
+            </div> -->
+          </div>
+        </div>
+        <div class="h-[60vh] md:h-[65vh] p-4">
+          <div class="h-full w-full" ref="orbit_navigation" id="orbit-navigation">
+            <OrbitNavigation
+              :drawOrbitsData="drawOrbitsData"
+              :changeDays="changeDays"
+              :onActivityClick="(activity_id) => openSideBar(activity_id)" />
+          </div>
+        </div>
+        
       </div>
+
     </div>
   </div>
-
-  <TransitionRoot as="template" :show="openAction">
-    <Dialog as="div" class="relative z-10" @close="openAction = false">
-      <TransitionChild as="template" enter="ease-in-out duration-500" enter-from="opacity-0" enter-to="opacity-100" leave="ease-in-out duration-500" leave-from="opacity-100" leave-to="opacity-0">
-        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-      </TransitionChild>
-
-      <div class="fixed inset-0 overflow-hidden">
-        <div class="absolute inset-0 overflow-hidden">
-          <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
-            <TransitionChild as="template" enter="transform transition ease-in-out duration-500 sm:duration-700" enter-from="translate-x-full" enter-to="translate-x-0" leave="transform transition ease-in-out duration-500 sm:duration-700" leave-from="translate-x-0" leave-to="translate-x-full">
-              <DialogPanel class="pointer-events-auto relative w-96">
-                <TransitionChild as="template" enter="ease-in-out duration-500" enter-from="opacity-0" enter-to="opacity-100" leave="ease-in-out duration-500" leave-from="opacity-100" leave-to="opacity-0">
-                  <div class="absolute top-0 left-0 -ml-8 flex pt-4 pr-2 sm:-ml-10 sm:pr-4">
-                    <button type="button" class="rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white" @click="openAction = false">
-                      <span class="sr-only">Close panel</span>
-                      <XMarkIcon class="h-6 w-6" aria-hidden="true" />
-                    </button>
-                  </div>
-                </TransitionChild>
-                <div class="h-full overflow-y-auto bg-white p-8">
-                  <div class="space-y-6 pb-16">
-                    <div>
-                      <div class="block w-full overflow-hidden rounded-lg">
-                        <img src="/static/remana/landscape-transparent.png" alt="" class="object-contain" />
-                      </div>
-                    </div>
-                    <div>
-                      <h3 class="font-medium text-gray-900">Activity Details</h3>
-                      <dl class="mt-2 divide-y divide-gray-200 border-t border-b border-gray-200">
-                        <div class="flex justify-between py-3 text-sm font-medium">
-                          <dt class="text-gray-500">Start Date</dt>
-                          <dd class="text-gray-900">{{ $moment(startDate).format("dddd, MMMM Do YYYY") }}</dd>
-                        </div>
-                        <div class="flex justify-between py-3 text-sm font-medium">
-                          <dt class="text-gray-500">End Date</dt>
-                          <dd class="text-gray-900">{{ $moment(endDate).format("dddd, MMMM Do YYYY") }}</dd>
-                        </div>
-                        <div class="flex justify-between py-3 text-sm font-medium">
-                          <dt class="text-gray-500">Activity Count</dt>
-                          <dd class="text-gray-900">{{ activities.length }}</dd>
-                        </div>
-                      </dl>
-                    </div>
-                    <div class="flex">
-                      <button type="button" class="flex-1 rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                      @click="openSideBar()">Add an activity</button>
-                      <!-- <button type="button" class="ml-3 flex-1 rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Delete</button> -->
-                    </div>
-                    <div>
-                      <h3 class="font-medium text-gray-900">Navigation</h3>
-                      <ul role="list" class="mt-2 divide-y divide-gray-200 border-t border-b border-gray-200">
-                        <li class="flex items-center justify-between py-3">
-                          <RouterLink :to="{name: 'home'}" type="button" class="rounded-md bg-white text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Home<span class="sr-only"> Home</span></RouterLink>
-                        </li>
-                        <li class="flex items-center justify-between py-3">
-                          <RouterLink :to="{name: 'activities'}" type="button" class="rounded-md bg-white text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Activities<span class="sr-only"> Activities</span></RouterLink>
-                        </li>
-                        <li class="flex items-center justify-between py-3">
-                          <RouterLink :to="{name: 'search'}" type="button" class="rounded-md bg-white text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Search<span class="sr-only"> Search</span></RouterLink>
-                        </li>
-                        <li class="flex items-center justify-between py-3">
-                          <RouterLink :to="{name: 'profile'}" type="button" class="rounded-md bg-white text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Your account<span class="sr-only"> Your account</span></RouterLink>
-                        </li>
-                        <li class="flex items-center justify-between py-3">
-                          <button type="button" class="rounded-md bg-white text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                            @click.prevent="logout">Sign out<span class="sr-only"> Sign out</span></button>
-                        </li>
-                      </ul>
-                    </div>
-                    
-                  </div>
-                </div>
-              </DialogPanel>
-            </TransitionChild>
-          </div>
-        </div>
-      </div>
-    </Dialog>
-  </TransitionRoot>
 
   <TransitionRoot as="template" :show="open">
     <Dialog as="div" class="relative z-10" @close="open = false">
@@ -368,7 +332,6 @@
   import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline'
   import VueTailwindDatepicker from "vue-tailwind-datepicker";
   import _ from 'lodash-es'
-  import { Bars3Icon } from '@heroicons/vue/24/outline'
 
   // const MIN_ORBIT_RADIUS = 130; // See below (getMinOrbitRadius) for dynamic setting
   // const ACTIVITY_ANGLE_AREA = 180;
@@ -395,9 +358,7 @@
       SwitchLabel,
 
       ExclamationTriangleIcon,
-      VueTailwindDatepicker,
-
-      Bars3Icon,
+      VueTailwindDatepicker
     },
 
     data() {
@@ -413,7 +374,6 @@
         MAX_ORBIT_RADIUS: null,
         ORBIT_SHAPE: "",
 
-        openAction: false,
         open: false,
         selectedId: null,
         errors: [],
@@ -682,12 +642,6 @@
     // Methods are functions that mutate state and trigger updates.
     // They can be bound as event handlers in templates.
     methods: {
-      logout() {
-        this.$store.dispatch('logout');
-
-        // named route with params to let the router build the url
-        this.$router.push({ name: 'home'})
-      },
       openPage(page) {
         this.$store.dispatch('fetchActivities', {
           'keyword': this.keyword,
@@ -747,12 +701,6 @@
         }
       },
       
-      openActionBar(id) {
-        this.openAction = true
-      },
-      closeActionBar(id) {
-        this.openAction = false
-      },
       openSideBar(id) {
         this.selectedId = id;
         if(id) {
@@ -858,10 +806,6 @@
         }
       }, 100);
 
-      if(!this.user) {
-        this.$store.dispatch('renewLogin');
-      }
-
     },
     unmounted() {
       // also a good idea to cancel the timer
@@ -872,4 +816,5 @@
 </script>
 
 <!-- References -->
-<!-- https://tailwind-ui-two.vercel.app/components/application-ui/overlays/slide-overs#component-62a04be4dcfb133783a1a2b1774a73fa -->
+<!-- https://tailwind-ui-two.vercel.app/components/ecommerce/components/activity-lists#component-d8eb32559745988d0026cae377c493a0 -->
+<!-- https://tailwind-ui-two.vercel.app/components/application-ui/navigation/pagination#component-0797a02a34692167c369d134e7a6f9c5 -->

@@ -8,6 +8,7 @@ import ProfileView from '../views/auth/ProfileView.vue'
 
 import MainView from '../views/MainView.vue'
 import HomeView from '../views/HomeView.vue'
+import ActivitiesViewV2 from '../views/ActivitiesViewV2.vue'
 import ActivitiesView from '../views/ActivitiesView.vue'
 import SearchView from '../views/SearchView.vue'
 
@@ -62,13 +63,13 @@ const router = createRouter({
           path: '',
           component: HomeView,
         },
-        {
-          // UserProfile will be rendered inside User's <router-view>
-          // when /user/:id/profile is matched
-          name: 'activities',
-          path: '/activities',
-          component: ActivitiesView,
-        },
+        // {
+        //   // UserProfile will be rendered inside User's <router-view>
+        //   // when /user/:id/profile is matched
+        //   name: 'activities',
+        //   path: '/activities',
+        //   component: ActivitiesViewV2,
+        // },
         {
           // UserProfile will be rendered inside User's <router-view>
           // when /user/:id/profile is matched
@@ -93,6 +94,12 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue')
+    },
+
+    {
+      path: '/activities',
+      name: 'activities',
+      component: () => import('../views/ActivitiesView.vue')
     }
   ],
   scrollBehavior(to, from, savedPosition) {

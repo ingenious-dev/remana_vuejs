@@ -349,7 +349,7 @@ export default {
   mounted() {
     if(this.token) {
       this.$store.dispatch('renewLogin');
-    } 
+    }
   }
 
 }

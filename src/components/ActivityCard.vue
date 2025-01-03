@@ -1,7 +1,7 @@
 <template>
     <div class="border-t border-b border-gray-200 bg-white shadow-sm sm:rounded-lg sm:border w-full relative">
 
-        <div class="flex items-center p-2">
+        <div class="flex items-center p-2 bg-slate-50">
             <div class="flex-shrink-0">
                 <div>
                     <div class="h-10 w-10 rounded-full">
@@ -24,7 +24,7 @@
                 </div>
             </div>
         </div>
-        <div class="m-2">
+        <div class="m-2 max-h-52 overflow-auto">
             <div class="flex space-x-1 text-sm text-gray-500 justify-between">
                 <time :datetime="activity.date_of_activity">{{ activity.date_of_activity }}</time>
                 <span>{{ $moment(activity.date_of_activity).fromNow() }}</span>

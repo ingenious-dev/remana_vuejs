@@ -76,7 +76,7 @@
           </div>
         </div>
         <div class="h-[60vh] md:h-[65vh] p-4">
-          <div class="h-full w-full" ref="orbit_navigation">
+          <div class="h-full w-full" ref="orbit_navigation" id="orbit-navigation">
             <OrbitNavigation
               :drawOrbitsData="drawOrbitsData"
               :changeDays="changeDays"
@@ -235,87 +235,87 @@
   </TransitionRoot>
 
   <TransitionRoot as="template" :show="openModal">
-      <Dialog as="div" class="relative z-10" @close="openModal = false">
-        <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0" enter-to="opacity-100" leave="ease-in duration-200" leave-from="opacity-100" leave-to="opacity-0">
-          <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-        </TransitionChild>
+    <Dialog as="div" class="relative z-10" @close="openModal = false">
+      <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0" enter-to="opacity-100" leave="ease-in duration-200" leave-from="opacity-100" leave-to="opacity-0">
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+      </TransitionChild>
 
-        <div class="fixed inset-0 z-10 overflow-y-auto">
-          <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-            <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" enter-to="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200" leave-from="opacity-100 translate-y-0 sm:scale-100" leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
-              <DialogPanel class="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
-                <div class="absolute top-0 right-0 hidden pt-4 pr-4 sm:block">
-                  <button type="button" class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" @click="openModal = false">
-                    <span class="sr-only">Close</span>
-                    <XMarkIcon class="h-6 w-6" aria-hidden="true" />
-                  </button>
+      <div class="fixed inset-0 z-10 overflow-y-auto">
+        <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+          <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" enter-to="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200" leave-from="opacity-100 translate-y-0 sm:scale-100" leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
+            <DialogPanel class="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+              <div class="absolute top-0 right-0 hidden pt-4 pr-4 sm:block">
+                <button type="button" class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" @click="openModal = false">
+                  <span class="sr-only">Close</span>
+                  <XMarkIcon class="h-6 w-6" aria-hidden="true" />
+                </button>
+              </div>
+              <div class="sm:flex sm:items-start">
+                <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                  <ExclamationTriangleIcon class="h-6 w-6 text-red-600" aria-hidden="true" />
                 </div>
-                <div class="sm:flex sm:items-start">
-                  <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                    <ExclamationTriangleIcon class="h-6 w-6 text-red-600" aria-hidden="true" />
+                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                  <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900">Delete Activity</DialogTitle>
+                  <div class="mt-2">
+                    <p class="text-sm text-gray-500">Are you sure you want to delete the activity? All of your data will be permanently removed from our servers forever. This action cannot be undone.</p>
                   </div>
-                  <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                    <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900">Delete Activity</DialogTitle>
-                    <div class="mt-2">
-                      <p class="text-sm text-gray-500">Are you sure you want to delete the activity? All of your data will be permanently removed from our servers forever. This action cannot be undone.</p>
-                    </div>
-                  </div>
                 </div>
-                <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
-                  <button type="button" class="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm" @click="deleteActivity()">Delete</button>
-                  <button type="button" class="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm" @click="openModal = false">Cancel</button>
-                </div>
-              </DialogPanel>
-            </TransitionChild>
-          </div>
+              </div>
+              <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+                <button type="button" class="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm" @click="deleteActivity()">Delete</button>
+                <button type="button" class="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm" @click="openModal = false">Cancel</button>
+              </div>
+            </DialogPanel>
+          </TransitionChild>
         </div>
-      </Dialog>
-    </TransitionRoot>
+      </div>
+    </Dialog>
+  </TransitionRoot>
 
-    <TransitionRoot as="template" :show="openModalError">
-      <Dialog as="div" class="relative z-10" @close="openModalError = false">
-        <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0" enter-to="opacity-100" leave="ease-in duration-200" leave-from="opacity-100" leave-to="opacity-0">
-          <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-        </TransitionChild>
+  <TransitionRoot as="template" :show="openModalError">
+    <Dialog as="div" class="relative z-10" @close="openModalError = false">
+      <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0" enter-to="opacity-100" leave="ease-in duration-200" leave-from="opacity-100" leave-to="opacity-0">
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+      </TransitionChild>
 
-        <div class="fixed inset-0 z-10 overflow-y-auto">
-          <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-            <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" enter-to="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200" leave-from="opacity-100 translate-y-0 sm:scale-100" leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
-              <DialogPanel class="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
-                <div class="absolute top-0 right-0 hidden pt-4 pr-4 sm:block">
-                  <button type="button" class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" @click="openModalError = false">
-                    <span class="sr-only">Close</span>
-                    <XMarkIcon class="h-6 w-6" aria-hidden="true" />
-                  </button>
+      <div class="fixed inset-0 z-10 overflow-y-auto">
+        <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+          <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" enter-to="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200" leave-from="opacity-100 translate-y-0 sm:scale-100" leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
+            <DialogPanel class="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+              <div class="absolute top-0 right-0 hidden pt-4 pr-4 sm:block">
+                <button type="button" class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" @click="openModalError = false">
+                  <span class="sr-only">Close</span>
+                  <XMarkIcon class="h-6 w-6" aria-hidden="true" />
+                </button>
+              </div>
+              <div class="sm:flex sm:items-start">
+                <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                  <ExclamationTriangleIcon class="h-6 w-6 text-red-600" aria-hidden="true" />
                 </div>
-                <div class="sm:flex sm:items-start">
-                  <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                    <ExclamationTriangleIcon class="h-6 w-6 text-red-600" aria-hidden="true" />
+                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                  <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900">Error</DialogTitle>
+                  <div class="mt-2">
+                    <!-- <p class="text-sm text-gray-500">{{ modalErrorMessage }}</p> -->
+
+                    <p v-if="errors.length">
+                      <b>Please correct the following error(s):</b>
+                      <ul>
+                        <li v-for="error in errors" :key="error">{{ error }}</li>
+                      </ul>
+                    </p>
                   </div>
-                  <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                    <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900">Error</DialogTitle>
-                    <div class="mt-2">
-                      <!-- <p class="text-sm text-gray-500">{{ modalErrorMessage }}</p> -->
-
-                      <p v-if="errors.length">
-                        <b>Please correct the following error(s):</b>
-                        <ul>
-                          <li v-for="error in errors" :key="error">{{ error }}</li>
-                        </ul>
-                      </p>
-                    </div>
-                  </div>
                 </div>
-                <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
-                  <!-- <button type="button" class="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm" @click="setStatus()">Try Again</button> -->
-                  <button type="button" class="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm" @click="openModalError = false">Ok</button>
-                </div>
-              </DialogPanel>
-            </TransitionChild>
-          </div>
+              </div>
+              <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+                <!-- <button type="button" class="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm" @click="setStatus()">Try Again</button> -->
+                <button type="button" class="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm" @click="openModalError = false">Ok</button>
+              </div>
+            </DialogPanel>
+          </TransitionChild>
         </div>
-      </Dialog>
-    </TransitionRoot>
+      </div>
+    </Dialog>
+  </TransitionRoot>
 
 </template>
 
@@ -333,10 +333,9 @@
   import VueTailwindDatepicker from "vue-tailwind-datepicker";
   import _ from 'lodash-es'
 
-  // const MIN_ORBIT_RADIUS = 130; // See below for dynamic setting
-  const ACTIVITY_ANGLE_AREA = 180;
+  // const MIN_ORBIT_RADIUS = 130; // See below (getMinOrbitRadius) for dynamic setting
+  // const ACTIVITY_ANGLE_AREA = 180;
   const MIN_ACTIVITY_RADIUS = 20;
-  const WHEEL_SENSITIVITY = 1;
 
   export default {
     components: {
@@ -364,11 +363,16 @@
 
     data() {
       return {
+        IS_DEBUG: import.meta.env.VITE_IS_DEBUG,
+
         pageLimit: 10,
         keyword: '',
         dateRange: 7,
         startDate: this.subtractDays(new Date(), 7),
         endDate: new Date(),
+        orbitRadiusTimer: null,
+        MAX_ORBIT_RADIUS: null,
+        ORBIT_SHAPE: "",
 
         open: false,
         selectedId: null,
@@ -473,13 +477,26 @@
         return orbits;
       },
       drawOrbitsData() {
-        var renderData = []
+        const orbitCenterRenderData = {
+          styles: this.ORBIT_SHAPE == "SEMI_CIRCLE"
+          ? {
+            "bottom": "0",
+            "left": "50%",
+            "transform": "translateX(-50%)",
+          }
+          : {
+            "top": "50%",
+            "left": "50%",
+            "transform": "translate(-50%, -50%)",
+          }
+        }
+
+        var orbitsRenderData = []
         const orbits = this.orbitsData
         
         const no_of_orbits = orbits.length;
-        const MIN_ORBIT_RADIUS = this.$refs.orbit_navigation
-        ? (2 * Math.min(this.$refs.orbit_navigation.offsetHeight, this.$refs.orbit_navigation.offsetWidth)) / no_of_orbits
-        : 130;
+        // + https://chatgpt.com/share/67728637-d634-8004-97c0-e0b78ed1def3
+        const MIN_ORBIT_RADIUS = (2 * this.MAX_ORBIT_RADIUS) / no_of_orbits;
 
         // const hue_interval = 360 / no_of_orbits ? no_of_orbits : 1;
         const lightness_interval = 100 / no_of_orbits ? no_of_orbits : 1;
@@ -492,25 +509,51 @@
           }
 
           const radius_factor = orbit_index + 1;
-          const orbit_height = (MIN_ORBIT_RADIUS * radius_factor) / 2;
-          const orbit_width = MIN_ORBIT_RADIUS * radius_factor;
-          // const orbit_hsla = `hsla(${hue_interval * radius_factor}, 100%, 50%, 1)`
-          // const orbit_hsla = `hsla(120, 0, ${lightness_interval * radius_factor}%, 1)`
-          const orbit_hsla = `hsla(206, 86, ${lightness_interval * radius_factor}%, 1)` // using remana colors
-          // const orbit_hsla = `hsla(${getRandomInt(360)}, 100%, 50%, 1)`;
+          const orbit_radius = (MIN_ORBIT_RADIUS * radius_factor) / 2;
+          // const orbit_height = orbit_radius / 2;
+          const orbit_height = this.ORBIT_SHAPE == "SEMI_CIRCLE"
+          ? orbit_radius
+          : orbit_radius * 2;
+          const orbit_width = orbit_radius * 2;
+          // const orbit_hsl = `hsl(${hue_interval * radius_factor}, 100%, 50%)`
+          // const orbit_hsl = `hsl(120, 0%, ${lightness_interval * radius_factor}%)`
+          const orbit_hsl = `hsl(206, 86%, ${lightness_interval * radius_factor}%)` // using remana colors
+          // const orbit_hsl = `hsl(${getRandomInt(360)}, 100%, 50%)`;
           const border_radius = orbit_height + (orbit_width - orbit_height) / 2;
 
-          orbit_data["styles"] = {
-            "height": `${orbit_height}px`,
-            "width": `${orbit_width}px`,
-            "borderColor": orbit_hsla,
-            "borderRadius": `${border_radius}px ${border_radius}px 0 0`, // + https://www.geeksforgeeks.org/how-to-draw-a-semi-circle-using-html-and-css/
+          if(this.ORBIT_SHAPE == "SEMI_CIRCLE") {
+            orbit_data["styles"] = {
+              "bottom": "0",
+              "transform": "translate(-50%)",
+
+              "height": `${orbit_height}px`,
+              "width": `${orbit_width}px`,
+              "borderLeft": `1px solid ${orbit_hsl}`,
+              "borderTop": `1px solid ${orbit_hsl}`,
+              "borderRadius": `${border_radius}px ${border_radius}px 0 0`, // + https://www.geeksforgeeks.org/how-to-draw-a-semi-circle-using-html-and-css/
+            }
+          } else {
+            orbit_data["styles"] = {
+              "top": "50%",
+              "transform": "translate(-50%, -50%)",
+
+              "height": `${orbit_height}px`,
+              "width": `${orbit_width}px`,
+              "borderLeft": `1px solid ${orbit_hsl}`,
+              "borderTop": `1px solid ${orbit_hsl}`,
+              "borderRight": `1px solid ${orbit_hsl}`,
+              "borderBottom": `1px solid ${orbit_hsl}`,
+              "borderRadius": "50%",
+            }
           }
           
           const activities = orbit["activities"];
           const no_of_activities = activities.length;
           const no_of_gaps = no_of_activities + 1;
-          const angle_interval = ACTIVITY_ANGLE_AREA / no_of_gaps;
+          // const angle_interval = this.ACTIVITY_ANGLE_AREA / no_of_gaps;
+          const angle_interval = this.ORBIT_SHAPE == "SEMI_CIRCLE"
+          ?  this.ACTIVITY_ANGLE_AREA / no_of_gaps
+          :  this.ACTIVITY_ANGLE_AREA / no_of_activities
 
           const activity_radius_factor = orbit_index + 1;
           var activity_radius = MIN_ACTIVITY_RADIUS * activity_radius_factor * (1.2 / (orbit_index + 1));
@@ -519,36 +562,61 @@
             const activity = activities[activity_index];
 
             // let polar=[1.4142, 45 ];
-            const radius = orbit_height;
+            const radius = orbit_radius;
             const degrees = angle_interval * (activity_index + 1)
             let polar=[radius, degrees];
             const cartesian = ConvertToCartesian(polar);
             const y_axis = Math.floor(cartesian[1])
             const x_axis = Math.floor(cartesian[0])
 
-            orbit_data["activities_data"].push({
+            const activity_data = {
               "styles": {
                 "height": `${activity_radius * 2}px`,
                 "width": `${activity_radius * 2}px`,
-                "background": orbit_hsla,
+                "background": orbit_hsl,
 
-                "top": `calc(100% - ${y_axis + activity_radius}px)`, // + https://www.geeksforgeeks.org/how-to-draw-a-semi-circle-using-html-and-css/
+                // "top": `calc(100% - ${y_axis + activity_radius}px)`,
                 "left": `calc(50% - ${x_axis + activity_radius}px)`,
               },
               "activity": activity,
-            })
+            }
+
+            if(this.ORBIT_SHAPE == "SEMI_CIRCLE") {
+              activity_data["styles"]["top"] = `calc(100% - ${y_axis + activity_radius}px)`
+            } else {
+              activity_data["styles"]["top"] = `calc(50% - ${y_axis + activity_radius}px)`
+            }
+
+            if(this.IS_DEBUG == "true") {
+              activity_data["debug_data"] = {
+                "angle_interval": angle_interval,
+                "degrees": degrees,
+                "x_axis": x_axis,
+                "y_axis": y_axis,
+              }
+            }
+
+            orbit_data["activities_data"].push(activity_data)
           }
 
           orbit_data["label_styles"] = {
-            "top": `${activity_radius}px`, 
-          },
+            "top": `${activity_radius}px`,
+          }
+          if(this.IS_DEBUG == "true") {
+            orbit_data["debug_data"] = {
+              "orbit_radius": orbit_radius,
+            }
+          }
 
-          renderData.push(orbit_data)
+          orbitsRenderData.push(orbit_data)
         }
 
-        renderData.reverse() // helps with 'z-index'  of orbits
+        orbitsRenderData.reverse() // helps with 'z-index'  of orbits
 
-        return renderData;
+        return {
+          orbit_center: orbitCenterRenderData,
+          orbits: orbitsRenderData,
+        };
       },
 
       newOrEdit() {
@@ -564,11 +632,11 @@
     watch: {
       // whenever question changes, this function will run
       selectedDates(newValue, oldValue) {
-        console.log(newValue)
+        // console.log(newValue)
         if(newValue.length) {
-          this.date_of_activity = this.$moment(newValue[0]).format("YYYY-MM-DD");;
+          this.date_of_activity = this.$moment(newValue[0]).format("YYYY-MM-DD");
         }
-      }
+      },
     },
 
     // Methods are functions that mutate state and trigger updates.
@@ -596,32 +664,40 @@
         date_copy.setDate(date_copy.getDate() + days);
         return date_copy;
       },
-      changeDays(event) {
-        // console.log(event);
-        console.log(event.deltaY);
+      changeDays(gesture) {
+        switch (gesture.direction) {
+          case 'TOP_TO_BOTTOM':
+            // Get new records
 
-        event.preventDefault();
+            this.startDate = this.addDays(this.startDate, 1);
+            this.endDate = this.addDays(this.startDate, this.dateRange);
+            // this.openPage()
+            this.debouncedOpenPage()
+            break;
 
-        if(event.deltaY > WHEEL_SENSITIVITY) {
-          console.log('bottom -> top');
-          // SCROLLING DOWN
-          // Get older records
+          case 'BOTTOM_TO_TOP':
+            // Get older records
 
-          this.startDate = this.subtractDays(this.startDate, 1);
-          this.endDate = this.addDays(this.startDate, this.dateRange);
-          // this.openPage()
-          this.debouncedOpenPage()
+            this.startDate = this.subtractDays(this.startDate, 1);
+            this.endDate = this.addDays(this.startDate, this.dateRange);
+            // this.openPage()
+            this.debouncedOpenPage()
+            break;
+        
+          default:
+            break;
         }
-
-        if(event.deltaY < - WHEEL_SENSITIVITY) {
-          console.log('top -> bottom');
-          // SCROLLING UP
-          // Get new records
-
-          this.startDate = this.addDays(this.startDate, 1);
-          this.endDate = this.addDays(this.startDate, this.dateRange);
-          // this.openPage()
-          this.debouncedOpenPage()
+      },
+      setCirleProperties() {
+        // this.MAX_ORBIT_RADIUS = Math.min(this.$refs.orbit_navigation.offsetHeight, this.$refs.orbit_navigation.offsetWidth / 2);
+        if(this.$refs.orbit_navigation.offsetHeight < this.$refs.orbit_navigation.offsetWidth / 2) {
+          this.MAX_ORBIT_RADIUS = this.$refs.orbit_navigation.offsetHeight;
+          this.ACTIVITY_ANGLE_AREA = 180;
+          this.ORBIT_SHAPE = "SEMI_CIRCLE";
+        } else {
+          this.MAX_ORBIT_RADIUS = Math.min(this.$refs.orbit_navigation.offsetHeight / 2, this.$refs.orbit_navigation.offsetWidth / 2);
+          this.ACTIVITY_ANGLE_AREA = 360;
+          this.ORBIT_SHAPE = "FULL_CIRCLE";
         }
       },
       
@@ -710,6 +786,9 @@
       // + https://vuejs.org/guide/essentials/reactivity-fundamentals.html#stateful-methods
       // each instance now has its own copy of debounced handler
       this.debouncedOpenPage = _.debounce(this.openPage, 500)
+
+      // + https://stackoverflow.com/questions/49380830/vue-js-how-to-get-window-size-whenever-it-changes/49381030#49381030
+      window.addEventListener("resize", this.setCirleProperties);
     },
 
     // Lifecycle hooks are called at different stages
@@ -718,6 +797,15 @@
     mounted() {
       // console.log(`The initial count is ${this.count}.`)
       this.openPage();
+
+      this.orbitRadiusTimer = setInterval(() => {
+        if(this.$refs.orbit_navigation) {
+          this.setCirleProperties();
+
+          clearInterval(this.orbitRadiusTimer)
+        }
+      }, 100);
+
     },
     unmounted() {
       // also a good idea to cancel the timer

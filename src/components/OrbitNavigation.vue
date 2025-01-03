@@ -1,19 +1,28 @@
 <template>
   <div id="orbit-container">
-    <div id="orbit-center">
+    <!-- <div id="orbit-center">
+      <div class="h-full w-full flex items-center justify-center shadow-2xl">
+        <img class="h-4 w-auto" src="/static/remana/icon-transparent.png" alt="" />
+      </div>
+    </div> -->
+    <div id="orbit-center"
+      :style="drawOrbitsData.orbit_center.styles">
       <div class="h-full w-full flex items-center justify-center shadow-2xl">
         <img class="h-4 w-auto" src="/static/remana/icon-transparent.png" alt="" />
       </div>
     </div>
     <div id="orbit-wrapper" ref="orbit_wrapper">
-      <div v-for="(orbit_data, orbit_index) in drawOrbitsData" :key="orbit_index"
-        class="orbit"
+      <div v-for="(orbit_data, orbit_index) in drawOrbitsData.orbits" :key="orbit_index"
+        class="orbit "
         :style="orbit_data.styles"
         :ref="`orbit_${orbit_index}`"
       >
         <div class="orbit-label text-xs text-gray-500" :style="orbit_data.label_styles">
+          <!-- {{ orbit_index }} -->
           <!-- {{ orbit_data.orbit["label"] }} -->
-          <time :datetime="orbit_data.orbit['label']">{{ $moment(orbit_data.orbit['label']).format("ddd, MMM D") }}</time>
+
+          <time :datetime="orbit_data.orbit['label']" class="lg:hidden">{{ $moment(orbit_data.orbit['label']).format("MMM D") }}</time>
+          <time :datetime="orbit_data.orbit['label']" class="hidden lg:inline">{{ $moment(orbit_data.orbit['label']).format("ddd, MMM D") }}</time>
         </div>
 
         <Popper
@@ -34,13 +43,23 @@
               // background: activity_data.styles.background
             }"
             @click="onActivityClick(activity_data.activity.id)">
+              <!-- {{ orbit_index }} -->
+
               <EnvelopeIcon class="size-6" v-if="activity_data.activity.category == 'email'" />
               <CalendarDaysIcon class="size-6" v-if="activity_data.activity.category == 'event'" />
           </div>
           
           <template #content>
             <!-- <div>This is the Popper content</div> -->
-            <ActivityCard :activity="activity_data.activity" class="md:w-72" />
+            
+            <ActivityDebugCard
+              :orbit_index="orbit_index"
+              :orbit_data="orbit_data"
+              :activity_index="activity_index"
+              :activity_data="activity_data"
+              class="w-72 md:w-80" v-if="orbit_data.debug_data" />
+
+            <ActivityCard :activity="activity_data.activity" class="w-72 md:w-80" />
           </template>
         </Popper>
 
@@ -52,21 +71,28 @@
 <script>
   import Popper from "vue3-popper";
   import ActivityCard from "./ActivityCard.vue"
+  import ActivityDebugCard from "./ActivityDebugCard.vue"
   import { EnvelopeIcon, CalendarDaysIcon } from '@heroicons/vue/20/solid'
+
+  const WHEEL_SENSITIVITY = 1;
+  const SCROLL_THROLLING_INTERVAL = 100;
 
   export default {
     props: ['drawOrbitsData', 'changeDays', 'onActivityClick'],
     components: {
       Popper,
       EnvelopeIcon, CalendarDaysIcon,
-      ActivityCard
+      ActivityCard, ActivityDebugCard,
     },
 
     data() {
       return {
+        lastCall: 0,
         // Use this to prevent orbit scroll so you scroll
         // through the content of the poppover instead
-        allowOrbitScroll: true
+        allowOrbitScroll: true,
+
+        touchPos: null,
       }
     },
 
@@ -82,10 +108,72 @@
         this.allowOrbitScroll = true;
       },
       handleWheelScroll(event) {
+        // <<<<<<<<>>>>>>>
+        // + https://chatgpt.com/share/677791e2-e588-8004-a41d-3245760a3749 (2. Throttling)
+        const now = Date.now();
+        // if (now - this.lastCall < 50) return; // Throttle to 50ms intervals
+        if (now - this.lastCall < SCROLL_THROLLING_INTERVAL) return; // Throttle to 50ms intervals
+        this.lastCall = now;
+        // <<<<<<<<>>>>>>>
+
+        event.preventDefault();
+
+        // console.log(event);
+        // console.log(event.deltaY);
+
         if(this.allowOrbitScroll) {
-          this.changeDays(event);
+
+          if(event.deltaY > WHEEL_SENSITIVITY) {
+            // console.log('bottom -> top');
+            // SCROLLING DOWN
+            
+            const gesture = {
+              direction: 'BOTTOM_TO_TOP',
+            }
+            this.changeDays(gesture);
+          }
+
+          if(event.deltaY < - WHEEL_SENSITIVITY) {
+            // console.log('top -> bottom');
+            // SCROLLING UP
+            
+            const gesture = {
+              direction: 'TOP_TO_BOTTOM',
+            }
+            this.changeDays(gesture);
+          }
+
         }
-      }
+      },
+
+      // detect wether the "old" touchPos is 
+      // greater or smaller than the newTouchPos
+      handleTouch(e) {
+        // <<<<<<<<>>>>>>>
+        // + https://chatgpt.com/share/677791e2-e588-8004-a41d-3245760a3749 (2. Throttling)
+        const now = Date.now();
+        // if (now - this.lastCall < 50) return; // Throttle to 50ms intervals
+        if (now - this.lastCall < SCROLL_THROLLING_INTERVAL) return; // Throttle to 50ms intervals
+        this.lastCall = now;
+        // <<<<<<<<>>>>>>>
+        
+        // + https://stackoverflow.com/questions/36596562/detect-touch-scroll-up-or-down/68074918#68074918
+        let newTouchPos = e.changedTouches[0].clientY;
+        if(newTouchPos > this.touchPos) {
+            // console.log("finger moving down");
+            const gesture = {
+              direction: 'TOP_TO_BOTTOM',
+            }
+            this.changeDays(gesture);
+        }
+        if(newTouchPos < this.touchPos) {
+            // console.log("finger moving up");
+            const gesture = {
+              direction: 'BOTTOM_TO_TOP',
+            }
+            this.changeDays(gesture);
+        }
+      },
     },
 
     // Lifecycle hooks are called at different stages
@@ -94,6 +182,15 @@
     mounted() {
       // console.log(`The initial count is ${this.count}.`)
       this.$refs.orbit_wrapper.onwheel = this.handleWheelScroll;
+
+      // <<<<<<<>>>>>>>>
+      // + https://stackoverflow.com/questions/36596562/detect-touch-scroll-up-or-down/68074918#68074918
+      // store the touching position at the start of each touch
+      this.$refs.orbit_wrapper.ontouchstart  = function(e){
+        this.touchPos = e.changedTouches[0].clientY;
+      };
+      this.$refs.orbit_wrapper.ontouchmove = this.handleTouch
+      // <<<<<<<>>>>>>>>
     }
     
   }
@@ -135,14 +232,12 @@
 
   .orbit {
       position: absolute;
-      bottom: 0%;
+      /* bottom: 0%; */
       left: 50%;
-      transform: translate(-50%);
+      /* transform: translate(-50%); */
       
-      /* border-radius: 50%; */
-      /* border: 1px solid black; */
-      border-left: 1px solid black;
-      border-top: 1px solid black;
+      /* border-left: 1px solid black;
+      border-top: 1px solid black; */
   }
 
   .orbit-label {
@@ -171,6 +266,10 @@
     width: 30px;
     background: white;
     cursor: pointer;
+  }
+
+  .activity:hover {
+    background: hsl(206, 86%, 90%);
   }
 </style>
 

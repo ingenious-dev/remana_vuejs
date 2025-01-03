@@ -36,7 +36,7 @@
           <ArrowPathIcon class="h-6 w-6 text-green-600 animate-spin" aria-hidden="true" />
         </div>
         <div class="mt-3 text-center sm:mt-5">
-          <div as="h3" class="text-lg font-medium leading-6 text-gray-900">Getting Store Items</div>
+          <div as="h3" class="text-lg font-medium leading-6 text-gray-900">Getting Activities</div>
           <!-- <div class="mt-2">
             <p class="text-sm text-gray-500">KIndly wait while we process your profile. <br> This should take a second</p>
           </div> -->
@@ -58,7 +58,7 @@
 
 
         <h3 class="mt-2 text-sm font-medium text-gray-900">No search results</h3>
-        <p class="mt-1 text-sm text-gray-500">There are are no store items for your search.</p>
+        <p class="mt-1 text-sm text-gray-500">There are are no activities for your search.</p>
         <p class="mt-1 text-sm text-gray-500">"{{keyword}}"</p>
         <div class="mt-6">
           <button type="button" class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"

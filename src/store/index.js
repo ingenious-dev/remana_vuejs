@@ -22,6 +22,7 @@ import { createStore } from 'vuex'
 
 import auth from './auth';
 import activities from './activities';
+import persons from './persons';
 
 import alert from './alert';
 
@@ -31,6 +32,7 @@ const store = createStore({
         // b: moduleB,
         auth: auth,
         activities: activities,
+        persons: persons,
 
         alert: alert,
     }

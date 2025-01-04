@@ -13,77 +13,77 @@
   ```
 -->
 <template>
-  <div class="bg-white">
+  <div class="bg-slate-50">
     <div class="mx-auto max-w-2xl py-4 px-4 sm:py-4 sm:px-6 lg:max-w-7xl lg:px-8">
       
-      <div class="bg-white">
-        <div class="py-6 px-4 sm:px-6 lg:p-4">
-          <div class="flex flex-col md:flex-row gap-4">
-
-            <ul role="list" class="flex-auto flex justify-between md:justify-around">
-              <li class="flex text-center">
-                <!-- <img class="h-10 w-10 rounded-full" :src="person.image" alt="" /> -->
-                <div class="ml-3">
-                  <p class="text-sm text-gray-500">
-                    <span class="lg:hidden">{{ $moment(startDate).format("MMM D YYYY") }}</span>
-                    <span class="hidden lg:inline">{{ $moment(startDate).format("dddd, MMMM Do YYYY") }}</span>
-                  </p>
-                  <p class="text-xs font-medium text-gray-900 mt-1">Start Date</p>
-                </div>
-              </li>
-              <li class="flex">
-                <div class="ml-3 text-center">
-                  <p class="text-sm text-gray-500">
-                    <span class="lg:hidden">{{ $moment(endDate).format("MMM D YYYY") }}</span>
-                    <span class="hidden lg:inline">{{ $moment(endDate).format("dddd, MMMM Do YYYY") }}</span>
-                  </p>
-                  <p class="text-xs font-medium text-gray-900 mt-1">End Date</p>
-                </div>
-              </li>
-              <li class="flex text-center">
-                <div class="ml-3">
-                  <p class="text-sm text-gray-500">
-                    {{ activities.length }}
-                  </p>
-                  <p class="text-xs font-medium text-gray-900 mt-1">Activity Count</p>
-                </div>
-              </li>
-            </ul>
-            <div class="">
-              <button
-                type="button"
-                class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 w-full"
-                @click="openSideBar()"
-                >Add an activity</button>
-            </div>
-
-          </div>
+      <div class="lg:flex lg:items-center lg:justify-between mb-4 md:mb-10">
+        <div>
+          <!-- <h3 class="text-sm font-semibold leading-6 text-gray-900">Search your activities</h3> -->
+          <p class="mt-2 text-sm leading-6 text-gray-600">A keyword search will run on activity subject to help you find them.</p>
         </div>
+        <form class="mt-6 sm:flex sm:max-w-md lg:mt-0" @submit.prevent="openPage()">
+          <label for="keyword" class="sr-only">Keyword</label>
+          <input type="name" name="keyword" id="keyword" autocomplete="keyword" class="w-full min-w-0 appearance-none rounded-md border-gray-300 bg-white px-[calc(theme(spacing.3)-1px)] py-[calc(theme(spacing[1.5])-1px)] text-base leading-7 text-gray-900 placeholder-gray-400 shadow-sm focus:border-indigo-600 focus:ring-indigo-600 sm:w-56 sm:text-sm sm:leading-6" placeholder="Enter keyword"
+            v-model="keyword" />
+          <div class="mt-4 rounded-md sm:mt-0 sm:ml-4 sm:flex-shrink-0">
+            <button type="submit" class="flex w-full items-center justify-center rounded-md bg-indigo-600 py-1.5 px-3 text-base font-semibold leading-7 text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:text-sm sm:leading-6">Search</button>
+          </div>
+        </form>
       </div>
 
-      <div class="bg-slate-50 shadow-sm sm:rounded-lg mt-4 relative">
-        <div class="absolute top-0 left-0">
-          <div class="text-center flex items-center gap-4 p-2" v-if="activityIsLoading">
-            <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
-              <ArrowPathIcon class="h-6 w-6 text-green-600 animate-spin" aria-hidden="true" />
-            </div>
-            <!-- <div class="text-center">
-              <div as="h3" class="text-lg font-medium leading-6 text-gray-900">Getting Activities</div>
-              <div class="mt-2">
-                <p class="text-sm text-gray-500">Kindly wait while we get activities. <br> This should take a second</p>
-              </div>
-            </div> -->
-          </div>
+      <div class="text-center mt-6" v-if="activityIsLoading">
+        <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+          <ArrowPathIcon class="h-6 w-6 text-green-600 animate-spin" aria-hidden="true" />
         </div>
-        <div class="h-[60vh] md:h-[65vh] p-4">
-          <div class="h-full w-full" ref="orbit_navigation" id="orbit-navigation">
-            <OrbitNavigation
-              :drawOrbitsData="drawOrbitsData"
-              :changeDays="changeDays"
-              :onActivityClick="(activity_id) => openSideBar(activity_id)" />
-          </div>
+        <div class="mt-3 text-center sm:mt-5">
+          <div as="h3" class="text-lg font-medium leading-6 text-gray-900">Getting Activities</div>
+          <!-- <div class="mt-2">
+            <p class="text-sm text-gray-500">KIndly wait while we process your profile. <br> This should take a second</p>
+          </div> -->
         </div>
+      </div>
+        <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" v-else-if="hasActivities">
         
+        <div v-for="activity in activities" :key="activity.id"
+          @click="openSideBar(activity.id)" class="col-span-1 cursor-pointer">
+          <ActivityCard :activity="activity" />
+        </div>
+
+      </ul>
+      <div class="text-center mt-6" v-else-if="keyword || filters">
+        <svg class="mx-auto h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
+        </svg>
+
+
+
+        <h3 class="mt-2 text-sm font-medium text-gray-900">No search results</h3>
+        <p class="mt-1 text-sm text-gray-500">There are no activities for your search.</p>
+        <p class="mt-1 text-sm text-gray-500">"{{keyword}}"</p>
+        <div class="mt-6">
+          <button type="button" class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            @click="clearSearch">
+            <XMarkIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+            Clear search
+          </button>
+        </div>
+      </div>
+      <div class="text-center mt-6" v-else>
+        <svg class="mx-auto h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" />
+        </svg>
+
+
+        <h3 class="mt-2 text-sm font-medium text-gray-900">No activities</h3>
+        <p class="mt-1 text-sm text-gray-500">The activities will be listed when available. <br> See you soon</p>
+        <!-- <div class="mt-6">
+          <button type="button" class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            @click="openStores">
+            <ArrowLeftIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+            Go back to activities
+          </button>
+        </div> -->
       </div>
 
     </div>
@@ -322,8 +322,7 @@
 <script>
   import { RouterLink, RouterView } from 'vue-router'
   import { ArrowLeftIcon, ArrowPathIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/20/solid'
-  import { ConvertToCartesian } from '../utilities/ConvertToCartesian'
-  import OrbitNavigation from '../components/OrbitNavigation.vue'
+  import ActivityCard from "../components/ActivityCard.vue"
 
   import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
   import { XMarkIcon } from '@heroicons/vue/24/outline'
@@ -331,16 +330,10 @@
   import { Switch, SwitchDescription, SwitchGroup, SwitchLabel } from '@headlessui/vue'
   import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline'
   import VueTailwindDatepicker from "vue-tailwind-datepicker";
-  import _ from 'lodash-es'
-
-  // const MIN_ORBIT_RADIUS = 130; // See below (getMinOrbitRadius) for dynamic setting
-  // const ACTIVITY_ANGLE_AREA = 180;
-  const MIN_ACTIVITY_RADIUS = 20;
 
   export default {
     components: {
       ArrowLeftIcon, ArrowPathIcon, ChevronLeftIcon, ChevronRightIcon,
-      OrbitNavigation,
 
       Dialog,
       DialogPanel,
@@ -358,21 +351,17 @@
       SwitchLabel,
 
       ExclamationTriangleIcon,
-      VueTailwindDatepicker
+      VueTailwindDatepicker,
+      ActivityCard,
     },
 
     data() {
       return {
-        IS_DEBUG: import.meta.env.VITE_IS_DEBUG,
-
         pageLimit: 10,
         keyword: '',
         dateRange: 7,
-        startDate: this.subtractDays(new Date(), 7),
-        endDate: new Date(),
-        orbitRadiusTimer: null,
-        MAX_ORBIT_RADIUS: null,
-        ORBIT_SHAPE: "",
+        // startDate: this.subtractDays(new Date(), 7),
+        // endDate: new Date(),
 
         open: false,
         selectedId: null,
@@ -419,205 +408,6 @@
         // return this.$store.state.stores;
         return this.$store.getters.activities.length;
       },
-      orbitsData() {
-        var orbits = []
-
-        if(this.user?.display_empty_spaces) {
-          for (let day_index = 1; day_index <= this.dateRange; day_index++) {
-            
-            const date = this.addDays(this.startDate, day_index);
-            const activity_date_str = this.getDateOnly(date)
-            const index = orbits.findIndex((x) => x.date === activity_date_str);
-            if(index < 0) {
-              orbits.push({
-                "label": activity_date_str,
-                "date": activity_date_str,
-                "activities": [],
-              })
-            }
-          }
-        }
-
-        this.activities.forEach(activity => {
-          const activity_date = new Date(activity.date_of_activity)
-          const activity_date_str = this.getDateOnly(activity_date)
-          // const data = {
-          //   "subject": activity.subject,
-          //   "category": activity.category,
-          // }
-          const data = activity;
-
-          const index = orbits.findIndex((x) => x.date === activity_date_str);
-          if(index < 0) {
-            orbits.push({
-            "label": activity_date_str,
-            "date": activity_date_str,
-            "activities": [data],
-          })
-          } else {
-            orbits[index]["activities"].push(data)
-          }
-        });
-
-        // sort by date
-        orbits.sort((a, b) => {
-          const nameA = a.date.toUpperCase(); // ignore upper and lowercase
-          const nameB = b.date.toUpperCase(); // ignore upper and lowercase
-          if (nameA < nameB) {
-            return -1;
-          }
-          if (nameA > nameB) {
-            return 1;
-          }
-
-          // names must be equal
-          return 0;
-        });
-
-        return orbits;
-      },
-      drawOrbitsData() {
-        const orbitCenterRenderData = {
-          styles: this.ORBIT_SHAPE == "SEMI_CIRCLE"
-          ? {
-            "bottom": "0",
-            "left": "50%",
-            "transform": "translateX(-50%)",
-          }
-          : {
-            "top": "50%",
-            "left": "50%",
-            "transform": "translate(-50%, -50%)",
-          }
-        }
-
-        var orbitsRenderData = []
-        const orbits = this.orbitsData
-        
-        const no_of_orbits = orbits.length;
-        // + https://chatgpt.com/share/67728637-d634-8004-97c0-e0b78ed1def3
-        const MIN_ORBIT_RADIUS = (2 * this.MAX_ORBIT_RADIUS) / no_of_orbits;
-
-        // const hue_interval = 360 / no_of_orbits ? no_of_orbits : 1;
-        const lightness_interval = 100 / no_of_orbits ? no_of_orbits : 1;
-        for (let orbit_index = 0; orbit_index < no_of_orbits; orbit_index++) {
-          const orbit = orbits[orbit_index];
-          var orbit_data = {
-            "styles": null,
-            "activities_data": [],
-            "orbit": orbit,
-          }
-
-          const radius_factor = orbit_index + 1;
-          const orbit_radius = (MIN_ORBIT_RADIUS * radius_factor) / 2;
-          // const orbit_height = orbit_radius / 2;
-          const orbit_height = this.ORBIT_SHAPE == "SEMI_CIRCLE"
-          ? orbit_radius
-          : orbit_radius * 2;
-          const orbit_width = orbit_radius * 2;
-          // const orbit_hsl = `hsl(${hue_interval * radius_factor}, 100%, 50%)`
-          // const orbit_hsl = `hsl(120, 0%, ${lightness_interval * radius_factor}%)`
-          const orbit_hsl = `hsl(206, 86%, ${lightness_interval * radius_factor}%)` // using remana colors
-          // const orbit_hsl = `hsl(${getRandomInt(360)}, 100%, 50%)`;
-          const border_radius = orbit_height + (orbit_width - orbit_height) / 2;
-
-          if(this.ORBIT_SHAPE == "SEMI_CIRCLE") {
-            orbit_data["styles"] = {
-              "bottom": "0",
-              "transform": "translate(-50%)",
-
-              "height": `${orbit_height}px`,
-              "width": `${orbit_width}px`,
-              "borderLeft": `1px solid ${orbit_hsl}`,
-              "borderTop": `1px solid ${orbit_hsl}`,
-              "borderRadius": `${border_radius}px ${border_radius}px 0 0`, // + https://www.geeksforgeeks.org/how-to-draw-a-semi-circle-using-html-and-css/
-            }
-          } else {
-            orbit_data["styles"] = {
-              "top": "50%",
-              "transform": "translate(-50%, -50%)",
-
-              "height": `${orbit_height}px`,
-              "width": `${orbit_width}px`,
-              "borderLeft": `1px solid ${orbit_hsl}`,
-              "borderTop": `1px solid ${orbit_hsl}`,
-              "borderRight": `1px solid ${orbit_hsl}`,
-              "borderBottom": `1px solid ${orbit_hsl}`,
-              "borderRadius": "50%",
-            }
-          }
-          
-          const activities = orbit["activities"];
-          const no_of_activities = activities.length;
-          const no_of_gaps = no_of_activities + 1;
-          // const angle_interval = this.ACTIVITY_ANGLE_AREA / no_of_gaps;
-          const angle_interval = this.ORBIT_SHAPE == "SEMI_CIRCLE"
-          ?  this.ACTIVITY_ANGLE_AREA / no_of_gaps
-          :  this.ACTIVITY_ANGLE_AREA / no_of_activities
-
-          const activity_radius_factor = orbit_index + 1;
-          var activity_radius = MIN_ACTIVITY_RADIUS * activity_radius_factor * (1.2 / (orbit_index + 1));
-
-          for (let activity_index = 0; activity_index < no_of_activities; activity_index++) {
-            const activity = activities[activity_index];
-
-            // let polar=[1.4142, 45 ];
-            const radius = orbit_radius;
-            const degrees = angle_interval * (activity_index + 1)
-            let polar=[radius, degrees];
-            const cartesian = ConvertToCartesian(polar);
-            const y_axis = Math.floor(cartesian[1])
-            const x_axis = Math.floor(cartesian[0])
-
-            const activity_data = {
-              "styles": {
-                "height": `${activity_radius * 2}px`,
-                "width": `${activity_radius * 2}px`,
-                "background": orbit_hsl,
-
-                // "top": `calc(100% - ${y_axis + activity_radius}px)`,
-                "left": `calc(50% - ${x_axis + activity_radius}px)`,
-              },
-              "activity": activity,
-            }
-
-            if(this.ORBIT_SHAPE == "SEMI_CIRCLE") {
-              activity_data["styles"]["top"] = `calc(100% - ${y_axis + activity_radius}px)`
-            } else {
-              activity_data["styles"]["top"] = `calc(50% - ${y_axis + activity_radius}px)`
-            }
-
-            if(this.IS_DEBUG == "true") {
-              activity_data["debug_data"] = {
-                "angle_interval": angle_interval,
-                "degrees": degrees,
-                "x_axis": x_axis,
-                "y_axis": y_axis,
-              }
-            }
-
-            orbit_data["activities_data"].push(activity_data)
-          }
-
-          orbit_data["label_styles"] = {
-            "top": `${activity_radius}px`,
-          }
-          if(this.IS_DEBUG == "true") {
-            orbit_data["debug_data"] = {
-              "orbit_radius": orbit_radius,
-            }
-          }
-
-          orbitsRenderData.push(orbit_data)
-        }
-
-        orbitsRenderData.reverse() // helps with 'z-index'  of orbits
-
-        return {
-          orbit_center: orbitCenterRenderData,
-          orbits: orbitsRenderData,
-        };
-      },
 
       newOrEdit() {
         return this.selectedId ? 'Edit' : 'New';
@@ -632,11 +422,11 @@
     watch: {
       // whenever question changes, this function will run
       selectedDates(newValue, oldValue) {
-        // console.log(newValue)
+        console.log(newValue)
         if(newValue.length) {
-          this.date_of_activity = this.$moment(newValue[0]).format("YYYY-MM-DD");
+          this.date_of_activity = this.$moment(newValue[0]).format("YYYY-MM-DD");;
         }
-      },
+      }
     },
 
     // Methods are functions that mutate state and trigger updates.
@@ -645,11 +435,15 @@
       openPage(page) {
         this.$store.dispatch('fetchActivities', {
           'keyword': this.keyword,
-          'start': this.getDateOnly(this.startDate),
-          'end': this.getDateOnly(this.endDate),
+          // 'start': this.getDateOnly(this.startDate),
+          // 'end': this.getDateOnly(this.endDate),
           'limit': this.pageLimit,
           'page': page
         });
+      },
+      clearSearch() {
+        this.keyword = null
+        this.openPage(null)
       },
       getDateOnly(item) {
         return `${item.getFullYear()}-${item.getMonth() + 1}-${item.getDate()}`
@@ -663,42 +457,6 @@
         var date_copy = new Date(date.valueOf());
         date_copy.setDate(date_copy.getDate() + days);
         return date_copy;
-      },
-      changeDays(gesture) {
-        switch (gesture.direction) {
-          case 'TOP_TO_BOTTOM':
-            // Get new records
-
-            this.startDate = this.addDays(this.startDate, 1);
-            this.endDate = this.addDays(this.startDate, this.dateRange);
-            // this.openPage()
-            this.debouncedOpenPage()
-            break;
-
-          case 'BOTTOM_TO_TOP':
-            // Get older records
-
-            this.startDate = this.subtractDays(this.startDate, 1);
-            this.endDate = this.addDays(this.startDate, this.dateRange);
-            // this.openPage()
-            this.debouncedOpenPage()
-            break;
-        
-          default:
-            break;
-        }
-      },
-      setCirleProperties() {
-        // this.MAX_ORBIT_RADIUS = Math.min(this.$refs.orbit_navigation.offsetHeight, this.$refs.orbit_navigation.offsetWidth / 2);
-        if(this.$refs.orbit_navigation.offsetHeight < this.$refs.orbit_navigation.offsetWidth / 2) {
-          this.MAX_ORBIT_RADIUS = this.$refs.orbit_navigation.offsetHeight;
-          this.ACTIVITY_ANGLE_AREA = 180;
-          this.ORBIT_SHAPE = "SEMI_CIRCLE";
-        } else {
-          this.MAX_ORBIT_RADIUS = Math.min(this.$refs.orbit_navigation.offsetHeight / 2, this.$refs.orbit_navigation.offsetWidth / 2);
-          this.ACTIVITY_ANGLE_AREA = 360;
-          this.ORBIT_SHAPE = "FULL_CIRCLE";
-        }
       },
       
       openSideBar(id) {
@@ -782,35 +540,12 @@
       },
     },
 
-    created() {
-      // + https://vuejs.org/guide/essentials/reactivity-fundamentals.html#stateful-methods
-      // each instance now has its own copy of debounced handler
-      this.debouncedOpenPage = _.debounce(this.openPage, 500)
-
-      // + https://stackoverflow.com/questions/49380830/vue-js-how-to-get-window-size-whenever-it-changes/49381030#49381030
-      window.addEventListener("resize", this.setCirleProperties);
-    },
-
     // Lifecycle hooks are called at different stages
     // of a component's lifecycle.
     // This function will be called when the component is mounted.
     mounted() {
       // console.log(`The initial count is ${this.count}.`)
       this.openPage();
-
-      this.orbitRadiusTimer = setInterval(() => {
-        if(this.$refs.orbit_navigation) {
-          this.setCirleProperties();
-
-          clearInterval(this.orbitRadiusTimer)
-        }
-      }, 100);
-
-    },
-    unmounted() {
-      // also a good idea to cancel the timer
-      // when the component is removed
-      this.debouncedOpenPage.cancel()
     },
   }
 </script>
@@ -818,3 +553,5 @@
 <!-- References -->
 <!-- https://tailwind-ui-two.vercel.app/components/ecommerce/components/activity-lists#component-d8eb32559745988d0026cae377c493a0 -->
 <!-- https://tailwind-ui-two.vercel.app/components/application-ui/navigation/pagination#component-0797a02a34692167c369d134e7a6f9c5 -->
+<!-- https://tailwind-ui-two.vercel.app/components/application-ui/lists/grid-lists#component-ce021f02f586e0e6a5f8de2ca2ee537b -->
+<!-- https://tailwind-ui-two.vercel.app/components/marketing/sections/footers#component-b2c41f4521a0b989aa8e3c0d6ee400c9 -->

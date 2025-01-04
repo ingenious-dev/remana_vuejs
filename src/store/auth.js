@@ -10,6 +10,9 @@ import {
 } from '../services/auth';
 
 import store from '.';
+import router from '../router'
+
+const LOGIN_TIMEOUT_SECONDS = parseInt(import.meta.env.VITE_LOGIN_TIMEOUT_SECONDS ?? "3600");
 
 const module = {
     state: () => ({
@@ -17,7 +20,8 @@ const module = {
         isLoading: false,
         error: "",
         token: localStorage.getItem('token'),
-        user: null
+        user: null,
+        loginTimer: null,
     }),
     mutations: {
         // increment (state) {
@@ -42,6 +46,7 @@ const module = {
         setToken(state, payload) {
             if(payload.token) {
                 localStorage.setItem("token", payload.token);
+                localStorage.setItem("lastLoginDate", Date.now().toString());
             }
             state.token = payload.token
         },
@@ -54,6 +59,15 @@ const module = {
         },
         clearUser(state) {
             state.user = null
+        },
+        setLoginTimer(state, payload) {
+            state.loginTimer = payload.loginTimer
+        },
+        clearLoginTimer(state) {
+            if(state.loginTimer) {
+                clearInterval(state.loginTimer)
+            }
+            state.loginTimer = null
         },
     },
     getters: {
@@ -81,16 +95,18 @@ const module = {
             commit('clearAuthIsLoading')
         },
 
-        login ({ commit, state }, payload) {   
+        login ({ dispatch, commit, state }, payload) {
             commit('setAuthIsLoading')         
             // Make a request for a user with a given ID
             login(payload)
                 .then(function (data) {
                     // handle success
-                    console.log(data);
+                    // console.log(data);
+
                     commit('setToken', {
                         token: data.authToken
                     })
+                    dispatch('startLoginTimer');
                     // ! TO BE DONE - get user details now?
                     // commit('setUser', {
                     //     user: data.user
@@ -108,13 +124,15 @@ const module = {
                     commit('clearAuthIsLoading')
                 });
         },
-        renewLogin ({ commit, state }, payload) {
+        renewLogin ({ dispatch, commit, state }, payload) {
+            dispatch('startLoginTimer');
+
             commit('setAuthIsLoading')
             // Make a request for a user with a given ID
             renewLogin(payload)
                 .then(function (data) {
                     // handle success
-                    console.log(data);
+                    // console.log(data);
 
                     commit('setUser', {
                         user: data
@@ -131,16 +149,18 @@ const module = {
                     commit('clearAuthIsLoading')
                 });
         },
-        register ({ commit, state }, payload) {   
+        register ({ dispatch, commit, state }, payload) {
             commit('setAuthIsLoading')         
             // Make a request for a user with a given ID
             register(payload)
                 .then(function (data) {
                     // handle success
                     // console.log(data);
+
                     commit('setToken', {
                         token: data.authToken
                     })
+                    dispatch('startLoginTimer');
                     // ! TO BE DONE - get user details now?
                     // commit('setUser', {
                     //     user: data.user
@@ -166,17 +186,19 @@ const module = {
             commit('clearToken')
         },
 
-        continueWithGoogleDeprecated ({ commit, state }, payload) {   
+        continueWithGoogleDeprecated ({ dispatch, commit, state }, payload) {   
             commit('setAuthIsLoading')         
             commit('clearAuthError')
             // Make a request for a user with a given ID
             continueWithGoogleDeprecated(payload)
                 .then(function (data) {
                     // handle success
-                    console.log(data);
+                    // console.log(data);
+
                     commit('setToken', {
                         token: data.token
                     })
+                    dispatch('startLoginTimer');
                     // ! TO BE DONE - get user details now?
                     // commit('setUser', {
                     //     user: data.user
@@ -196,17 +218,19 @@ const module = {
                 });
         },
 
-        continueWithGoogle ({ commit, state }, payload) {   
+        continueWithGoogle ({ dispatch, commit, state }, payload) {
             commit('setAuthIsLoading')         
             commit('clearAuthError')
             // Make a request for a user with a given ID
             continueWithGoogle(payload)
                 .then(function (data) {
                     // handle success
-                    console.log(data);
+                    // console.log(data);
+
                     commit('setToken', {
                         token: data.token
                     })
+                    dispatch('startLoginTimer');
                     // ! TO BE DONE - get user details now?
                     // commit('setUser', {
                     //     user: data.user
@@ -232,7 +256,8 @@ const module = {
             updateUser(payload)
                 .then(function (data) {
                     // handle success
-                    console.log(data);
+                    // console.log(data);
+
                     commit('setUser', {
                         user: data
                     })
@@ -249,6 +274,32 @@ const module = {
                     commit('clearAuthIsLoading')
                 });
         },
+
+        startLoginTimer ({ dispatch, commit, state }, payload) {   
+            commit('clearLoginTimer')
+            
+            const interval = setInterval(() => {
+                // console.log('Tiktok')
+                
+                const lastLoginDateStr = localStorage.getItem("lastLoginDate")
+                if(lastLoginDateStr) {
+                    const now = Date.now();
+                    const lastLoginDate = new Date(parseInt(lastLoginDateStr))
+                    if(now - lastLoginDate > LOGIN_TIMEOUT_SECONDS * 1000) {
+                        store.dispatch('showAlert', {title: 'Session has ended', message: 'Login session has ended, kindly login again', status: 'error'})
+
+                        dispatch('logout');
+                        router.push({ name: 'home'})
+
+                        commit('clearLoginTimer')
+                    }
+                }
+            }, 1000);
+
+            commit('setLoginTimer', {
+                loginTimer: interval,
+            })
+        }
     }
 }
 

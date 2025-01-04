@@ -4,7 +4,7 @@ import { API_V1_CANNONICAL } from '../network/network_info';
 
 // TODO https://stackoverflow.com/questions/11796093/is-there-a-way-to-provide-named-parameters-in-a-function-call-in-javascript
 // Want to use async/await? Add the `async` keyword to your outer function/method.
-async function fetchActivities({start, end, keyword, limit, page}) {
+async function fetchPersons({start, end, keyword, limit, page}) {
     var query = start == null ? '' : `start=${start}`;
     query += end == null ? '' : `&end=${end}`;
     query += keyword == null ? '' : `&q=${keyword}`;
@@ -13,7 +13,7 @@ async function fetchActivities({start, end, keyword, limit, page}) {
     query = `?${query}`;
 
     try {
-      const response = await http_client().get(`${API_V1_CANNONICAL}/activity${query}`);
+      const response = await http_client().get(`${API_V1_CANNONICAL}/person${query}`);
     //   console.log(response);
       return response.data;
     } catch (error) {
@@ -22,9 +22,11 @@ async function fetchActivities({start, end, keyword, limit, page}) {
     }
 }
   
-async function createActivity(data, ) {
+async function createPerson(data, ) {
     try {
-        const response = await http_client().post(`${API_V1_CANNONICAL}/activity`, data);
+        const response = await http_client().post(`${API_V1_CANNONICAL}/person`, data, {
+            headers: {'content-type': 'application/x-www-form-urlencoded'}
+        });
         // console.log(response);
         return response.data;
     } catch (error) {
@@ -33,9 +35,9 @@ async function createActivity(data, ) {
     }
 }
 
-async function getActivity(id) {
+async function getPerson(id) {
     try {
-        const response = await http_client().get(`${API_V1_CANNONICAL}/activity/${id}`);
+        const response = await http_client().get(`${API_V1_CANNONICAL}/person/${id}`);
         // console.log(response);
         return response.data;
     } catch (error) {
@@ -44,9 +46,11 @@ async function getActivity(id) {
     }
 }
 
-async function updateActivity(id, data) {
+async function updatePerson(id, data) {
     try {
-        const response = await http_client().patch(`${API_V1_CANNONICAL}/activity/${id}`, data);
+        const response = await http_client().patch(`${API_V1_CANNONICAL}/person/${id}`, data, {
+            headers: {'content-type': 'application/x-www-form-urlencoded'}
+        });
         // console.log(response);
         return response.data;
     } catch (error) {
@@ -55,9 +59,9 @@ async function updateActivity(id, data) {
     }
 }
 
-async function deleteActivity(id) {
+async function deletePerson(id) {
     try {
-        const response = await http_client().delete(`${API_V1_CANNONICAL}/activity/${id}`);
+        const response = await http_client().delete(`${API_V1_CANNONICAL}/person/${id}`);
         // console.log(response);
         return response;
     } catch (error) {
@@ -67,9 +71,9 @@ async function deleteActivity(id) {
 }
 
 export {
-    fetchActivities,
-    createActivity,
-    getActivity,
-    updateActivity,
-    deleteActivity,
+    fetchPersons,
+    createPerson,
+    getPerson,
+    updatePerson,
+    deletePerson,
 };

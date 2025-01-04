@@ -45,8 +45,15 @@
             @click="onActivityClick(activity_data.activity.id)">
               <!-- {{ orbit_index }} -->
 
-              <EnvelopeIcon class="size-6" v-if="activity_data.activity.category == 'email'" />
-              <CalendarDaysIcon class="size-6" v-if="activity_data.activity.category == 'event'" />
+              <!-- <EnvelopeIcon class="size-6" v-if="activity_data.activity.category == 'email'" />
+              <CalendarDaysIcon class="size-6" v-if="activity_data.activity.category == 'event'" /> -->
+
+              <img class="h-full w-full" :src="getProfilePictureSrc(activity_data.activity.people[0].profile_picture?.url)" alt="" v-if="activity_data.activity.people.length">
+              <svg v-else
+                class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+
           </div>
           
           <template #content>
@@ -57,9 +64,9 @@
               :orbit_data="orbit_data"
               :activity_index="activity_index"
               :activity_data="activity_data"
-              class="w-72 md:w-80" v-if="orbit_data.debug_data" />
+              class="min-w-80" v-if="orbit_data.debug_data" />
 
-            <ActivityCard :activity="activity_data.activity" class="w-72 md:w-80" />
+            <ActivityCard :activity="activity_data.activity" class="min-w-80" />
           </template>
         </Popper>
 
@@ -73,6 +80,7 @@
   import ActivityCard from "./ActivityCard.vue"
   import ActivityDebugCard from "./ActivityDebugCard.vue"
   import { EnvelopeIcon, CalendarDaysIcon } from '@heroicons/vue/20/solid'
+  import { getProfilePictureSrc } from '../utilities/url_manipulation'
 
   const WHEEL_SENSITIVITY = 1;
   const SCROLL_THROLLING_INTERVAL = 100;
@@ -93,6 +101,7 @@
         allowOrbitScroll: true,
 
         touchPos: null,
+        getProfilePictureSrc,
       }
     },
 
@@ -267,6 +276,7 @@
     width: 30px;
     background: white;
     cursor: pointer;
+    overflow: hidden;
   }
 
   .activity:hover {

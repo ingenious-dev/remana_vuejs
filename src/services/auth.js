@@ -7,7 +7,7 @@ import { AUTHENTICATION_CANNONICAL, GOOGLE_OAUTH_CANNONICAL } from '../network/n
 async function login(data) {
     try {
         const response = await axios.post(`${AUTHENTICATION_CANNONICAL}/auth/login`, data);
-        console.log(response);
+        // console.log(response);
         return response.data;
     } catch (error) {
         console.error(error);
@@ -18,7 +18,7 @@ async function login(data) {
 async function renewLogin() {
     try {
         const response = await http_client().get(`${AUTHENTICATION_CANNONICAL}/auth/me`);
-        console.log(response);
+        // console.log(response);
         return response.data;
     } catch (error) {
         console.error(error);
@@ -31,7 +31,7 @@ async function register(data) {
         const response = await axios.post(`${AUTHENTICATION_CANNONICAL}/auth/signup`, data, {
             headers: {'content-type': 'application/x-www-form-urlencoded'}
         });
-        console.log(response);
+        // console.log(response);
         return response.data;
     } catch (error) {
         console.error(error);
@@ -47,7 +47,7 @@ async function continueWithGoogleInit({redirect_uri}) {
 
     try {
         const response = await axios.get(`${GOOGLE_OAUTH_CANNONICAL}/oauth/google/init${query}`);
-        console.log(response);
+        // console.log(response);
         return response.data;
     } catch (error) {
         console.error(error);
@@ -63,7 +63,7 @@ async function continueWithGoogleDeprecated({code, redirect_uri}) {
     // + https://developers.google.com/identity/sign-in/web/server-side-flow#step_6_send_the_authorization_code_to_the_server
     try {
         const response = await axios.get(`${GOOGLE_OAUTH_CANNONICAL}/oauth/google/continue${query}`);
-        console.log(response);
+        // console.log(response);
         return response.data;
     } catch (error) {
         console.error(error);
@@ -75,7 +75,7 @@ async function continueWithGoogleDeprecated({code, redirect_uri}) {
 async function continueWithGoogle(data) {
     try {
         const response = await axios.post(`${GOOGLE_OAUTH_CANNONICAL}/oauth/google/continue`, data);
-        console.log(response);
+        // console.log(response);
         return response.data;
     } catch (error) {
         console.error(error);
@@ -90,7 +90,7 @@ async function updateUser(data) {
                 'Content-Type': 'multipart/form-data',
             }
         });
-        console.log(response);
+        // console.log(response);
         return response.data;
     } catch (error) {
         console.error(error);

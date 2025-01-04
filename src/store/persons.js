@@ -1,10 +1,10 @@
 import {
-    fetchActivities,
-    createActivity,
-    getActivity,
-    updateActivity,
-    deleteActivity,
-} from '../services/activities';
+    fetchPersons,
+    createPerson,
+    getPerson,
+    updatePerson,
+    deletePerson,
+} from '../services/persons';
 
 import store from '.';
 
@@ -15,7 +15,7 @@ const module = {
         next: null,
         previous: null,
 
-        activities: [],
+        persons: [],
     }),
     mutations: {
         // increment (state) {
@@ -25,10 +25,10 @@ const module = {
         increment (state, payload) {
             state.count += payload.amount
         },
-        setActivityIsLoading(state, payload) {
+        setPersonIsLoading(state, payload) {
             state.isLoading = true;
         },
-        clearActivityIsLoading(state, payload) {
+        clearPersonIsLoading(state, payload) {
             state.isLoading = false;
         },
 
@@ -37,36 +37,36 @@ const module = {
             state.next = payload.next;
             state.previous = payload.previous;
         },
-        addActivities(state, payload) {
-            // state.activities = payload.activities
+        addPersons(state, payload) {
+            // state.persons = payload.persons
 
-            const activities = payload.activities
-            for (let index = 0; index < activities.length; index++) {
-                const activity = activities[index];
+            const persons = payload.persons
+            for (let index = 0; index < persons.length; index++) {
+                const person = persons[index];
 
-                const ind = state.activities.findIndex((element) => element.id == activity.id)
+                const ind = state.persons.findIndex((element) => element.id == person.id)
                 if(ind > -1) {
-                    state.activities[ind] = activity
+                    state.persons[ind] = person
                 } else {
-                    state.activities.push(activity)
+                    state.persons.push(person)
                 }
                 
             }
         },
-        prependActivity(state, payload) {
-            state.activities.unshift(payload);
+        prependPerson(state, payload) {
+            state.persons.unshift(payload);
         },
-        updateActivity(state, payload) {
-            const array = state.activities; // [2, 5, 9]
+        updatePerson(state, payload) {
+            const array = state.persons; // [2, 5, 9]
 
             // console.log(array);
 
             // const index = array.indexOf(5);
             const index = array.findIndex((element) => element.id === payload.id);
-            state.activities[index] = payload;
+            state.persons[index] = payload;
         },
-        removeActivity(state, payload) {
-            const array = state.activities; // [2, 5, 9]
+        removePerson(state, payload) {
+            const array = state.persons; // [2, 5, 9]
 
             // console.log(array);
 
@@ -79,51 +79,51 @@ const module = {
             // array = [2, 9]
             // console.log(array);
 
-            state.activities = array;
+            state.persons = array;
         },
-        clearActivities(state, payload) {
-            state.activities = [];
+        clearPersons(state, payload) {
+            state.persons = [];
         }
     },
     getters: {
         // doubleCount (state) {
         //     return state.count * 2
         // },
-        activityIsLoading (state) {
+        personIsLoading (state) {
             return state.isLoading
         },
-        activityCount (state) {
+        personCount (state) {
             return state.count
         },
-        activityNextPage (state) {
+        personNextPage (state) {
             return state.next
         },
-        activityPreviousPage (state) {
+        personPreviousPage (state) {
             return state.previous
         },
-        activities (state) {
-            return state.activities
+        persons (state) {
+            return state.persons
         },
     },
     actions: {
-        setActivityIsLoading ({ commit, state }, payload) {
-            commit('setActivityIsLoading')
+        setPersonIsLoading ({ commit, state }, payload) {
+            commit('setPersonIsLoading')
         },
-        clearActivityIsLoading ({ commit, state }, payload) {
-            commit('clearActivityIsLoading')
+        clearPersonIsLoading ({ commit, state }, payload) {
+            commit('clearPersonIsLoading')
         },
-        fetchActivities ({ commit, state }, payload) {
-            commit('setActivityIsLoading')
+        fetchPersons ({ commit, state }, payload) {
+            commit('setPersonIsLoading')
             // Make a request for a user with a given ID
-            fetchActivities(payload)
+            fetchPersons(payload)
                 .then(function (data) {
                     // handle success
                     // console.log(data);
 
-                    commit('clearActivities')
-                    commit('addActivities', {
-                        // activities: data.results
-                        activities: data
+                    commit('clearPersons')
+                    commit('addPersons', {
+                        // persons: data.results
+                        persons: data
                     })
 
                     var next = null
@@ -147,73 +147,73 @@ const module = {
                 })
                 .finally(function () {
                     // always executed
-                    commit('clearActivityIsLoading')
+                    commit('clearPersonIsLoading')
                 });
         },
-        createActivity ({ commit, state }, payload) {   
-            commit('setActivityIsLoading')         
+        createPerson ({ commit, state }, payload) {   
+            commit('setPersonIsLoading')         
             // Make a request for a user with a given ID
-            createActivity(payload)
+            createPerson(payload)
                 .then(function (data) {
                     // handle success
                     // console.log(data);
 
-                    commit('prependActivity', data)
-                    store.dispatch('showAlert', {title: 'Successfully created!', message: 'activity', status: 'success'})
+                    commit('prependPerson', data)
+                    store.dispatch('showAlert', {title: 'Successfully created!', message: 'person', status: 'success'})
                 })
                 .catch(function (error) {
                     // handle error
                     console.log(error);
-                    store.dispatch('showAlert', {title: 'Error!', message: 'activity', status: 'error'})
+                    store.dispatch('showAlert', {title: 'Error!', message: 'person', status: 'error'})
                     throw error;
                 })
                 .finally(function () {
                     // always executed
-                    commit('clearActivityIsLoading')
+                    commit('clearPersonIsLoading')
                 });
         },
-        updateActivity ({ commit, state }, payload) {
-            commit('setActivityIsLoading')
+        updatePerson ({ commit, state }, payload) {
+            commit('setPersonIsLoading')
             // Make a request for a user with a given ID
-            updateActivity(payload.id, payload.data)
+            updatePerson(payload.id, payload.data)
                 .then(function (data) {
                     // handle success
                     // console.log(data);
 
-                    commit('updateActivity', data)
-                    store.dispatch('showAlert', {title: 'Successfully updated!', message: 'activity', status: 'success'})
+                    commit('updatePerson', data)
+                    store.dispatch('showAlert', {title: 'Successfully updated!', message: 'person', status: 'success'})
                 })
                 .catch(function (error) {
                     // handle error
                     console.log(error);
-                    store.dispatch('showAlert', {title: 'Error!', message: 'activity', status: 'error'})
+                    store.dispatch('showAlert', {title: 'Error!', message: 'person', status: 'error'})
                     throw error;
                 })
                 .finally(function () {
                     // always executed
-                    commit('clearActivityIsLoading')
+                    commit('clearPersonIsLoading')
                 });
         },
-        deleteActivity ({ commit, state }, payload) {            
-            commit('setActivityIsLoading')
+        deletePerson ({ commit, state }, payload) {            
+            commit('setPersonIsLoading')
             // Make a request for a user with a given ID
-            deleteActivity(payload.id)
+            deletePerson(payload.id)
                 .then(function (data) {
                     // handle success
                     // console.log(data);
-
-                    commit('removeActivity', {id: payload.id})
-                    store.dispatch('showAlert', {title: 'Successfully deleted!', message: 'activity', status: 'success'})
+                    
+                    commit('removePerson', {id: payload.id})
+                    store.dispatch('showAlert', {title: 'Successfully deleted!', message: 'person', status: 'success'})
                 })
                 .catch(function (error) {
                     // handle error
                     console.log(error);
-                    store.dispatch('showAlert', {title: 'Error!', message: 'activity', status: 'error'})
+                    store.dispatch('showAlert', {title: 'Error!', message: 'person', status: 'error'})
                     throw error;
                 })
                 .finally(function () {
                     // always executed
-                    commit('clearActivityIsLoading')
+                    commit('clearPersonIsLoading')
                 });
         }
     }

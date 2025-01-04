@@ -10,6 +10,7 @@ import MainView from '../views/MainView.vue'
 import HomeView from '../views/HomeView.vue'
 import ActivitiesViewV2 from '../views/ActivitiesViewV2.vue'
 import ActivitiesView from '../views/ActivitiesView.vue'
+import PeopleView from '../views/PeopleView.vue'
 import SearchView from '../views/SearchView.vue'
 
 import store from '../store'
@@ -70,6 +71,13 @@ const router = createRouter({
         //   path: '/activities',
         //   component: ActivitiesViewV2,
         // },
+        {
+          // UserProfile will be rendered inside User's <router-view>
+          // when /user/:id/profile is matched
+          name: 'people',
+          path: '/people',
+          component: PeopleView,
+        },
         {
           // UserProfile will be rendered inside User's <router-view>
           // when /user/:id/profile is matched

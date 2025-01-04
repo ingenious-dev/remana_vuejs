@@ -243,7 +243,8 @@ export default {
   watch: {
     // whenever question changes, this function will run
     token(newValue, oldValue) {
-      console.log(newValue)
+      // console.log(newValue)
+      
       // this.$router.push({ path: '/', replace: true })
       // this.$router.push({ name: 'login', replace: true })
       this.$router.push({ name: 'home', replace: true })

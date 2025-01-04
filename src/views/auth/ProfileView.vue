@@ -110,7 +110,7 @@
 </template>
 
 <script>
-import { API_V1_CANNONICAL } from '../../network/network_info';
+  import { API_V1_CANNONICAL } from '../../network/network_info';
 
     export default {
 
@@ -152,7 +152,6 @@ import { API_V1_CANNONICAL } from '../../network/network_info';
               const url = newUser.profile_picture?.url
               if(url) {
                 this.profilePictureSrc = url.includes("http") ? url : `${API_V1_CANNONICAL}${url}`
-                console.log(this.profilePictureSrc)
               }
             }
           }
@@ -185,7 +184,10 @@ import { API_V1_CANNONICAL } from '../../network/network_info';
                 // var imagefile = form.querySelector('[name="profile_picture"]');
                 var imagefile = this.$refs.profile_picture_input;
                 if(imagefile.files.length) {
-                  formData.append("profile_picture", imagefile.files[0]);
+                  // <<<<<<<<>>>>>>>>
+                  // formData.append("profile_picture", imagefile.files[0]);
+                  formData.append("profile_picture_input", imagefile.files[0]); // Unifying to the XANO Backend
+                  // <<<<<<<<>>>>>>>>
                 }
                 formData.append('name', this.name);
                 formData.append('bio', this.bio);

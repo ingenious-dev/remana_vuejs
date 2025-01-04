@@ -301,6 +301,7 @@ export default {
           // { name: 'Company', href: '#' },
           { name: 'Activities', href: '/activities' },
           { name: 'Search', href: '/search' },
+          { name: 'People', href: '/people' },
         ],
       },
 
@@ -348,7 +349,7 @@ export default {
   // This function will be called when the component is mounted.
   mounted() {
     if(this.token) {
-      this.$store.dispatch('renewLogin');
+      this.$store.dispatch('renewLogin');      
     }
   }
 

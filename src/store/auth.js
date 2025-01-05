@@ -284,6 +284,7 @@ const module = {
                 const lastLoginDateStr = localStorage.getItem("lastLoginDate")
                 if(lastLoginDateStr) {
                     const now = Date.now();
+                    // + https://stackoverflow.com/questions/4631928/convert-utc-epoch-to-local-date/22237139#22237139
                     const lastLoginDate = new Date(parseInt(lastLoginDateStr))
                     if(now - lastLoginDate > LOGIN_TIMEOUT_SECONDS * 1000) {
                         store.dispatch('showAlert', {title: 'Session has ended', message: 'Login session has ended, kindly login again', status: 'error'})

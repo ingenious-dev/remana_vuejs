@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Change `Activity` creating/update forms & delete models into reusable component.
+- Update homepage to show product features.
 
 ### Removed
 - Reduce/comment out usage of `console.log()`.

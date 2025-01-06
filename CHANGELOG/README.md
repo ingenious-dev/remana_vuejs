@@ -26,6 +26,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - Reduce/comment out usage of `console.log()`.
 
+### Fixes
+- Fix scroll by touch.
+
 [0.1.0]: https://github.com/ingenious-dev/remana_vuejs/releases/tag/0.1.0
 [0.2.0]: https://github.com/ingenious-dev/remana_vuejs/releases/tag/0.2.0
 [0.3.0]: https://github.com/ingenious-dev/remana_vuejs/releases/tag/0.3.0

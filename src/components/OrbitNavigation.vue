@@ -195,7 +195,7 @@
       // <<<<<<<>>>>>>>>
       // + https://stackoverflow.com/questions/36596562/detect-touch-scroll-up-or-down/68074918#68074918
       // store the touching position at the start of each touch
-      this.$refs.orbit_wrapper.ontouchstart  = function(e){
+      this.$refs.orbit_wrapper.ontouchstart  = (e) => {
         this.touchPos = e.changedTouches[0].clientY;
       };
       this.$refs.orbit_wrapper.ontouchmove = this.handleTouch
